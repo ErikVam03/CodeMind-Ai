@@ -6,7 +6,12 @@ const newChat = document.getElementById("newChat");
 const menuButton = document.getElementById("menuButton");
 const sidebar = document.querySelector(".sidebar");
 
-// Enviar mensagem
+// ================= HISTÓRICO DA CONVERSA =================
+
+let conversationHistory = [];
+
+// ================= ENVIAR MENSAGEM =================
+
 async function sendMessage(text = null) {
     const message = text || input.value.trim();
 
@@ -17,7 +22,14 @@ async function sendMessage(text = null) {
     input.value = "";
     input.style.height = "auto";
 
+    // Adiciona mensagem do usuário na tela
     addMessage("user", message);
+
+    // Guarda mensagem no histórico
+    conversationHistory.push({
+        role: "user",
+        content: message
+    });
 
     const loading = addLoading();
 
@@ -30,7 +42,8 @@ async function sendMessage(text = null) {
             },
 
             body: JSON.stringify({
-                message: message
+                message: message,
+                history: conversationHistory
             })
         });
 
@@ -45,10 +58,21 @@ async function sendMessage(text = null) {
             );
         }
 
+        // Adiciona resposta da IA na tela
         addMessage("ai", data.reply);
+
+        // Guarda resposta da IA no histórico
+        conversationHistory.push({
+            role: "assistant",
+            content: data.reply
+        });
 
     } catch (error) {
         loading.remove();
+
+        // Remove a última mensagem do histórico
+        // se a requisição falhar
+        conversationHistory.pop();
 
         addMessage(
             "ai",
@@ -60,9 +84,8 @@ async function sendMessage(text = null) {
     }
 }
 
+// ================= INDICADOR DE CARREGAMENTO =================
 
-
-// Indicador de carregamento
 function addLoading() {
     const loading = document.createElement("div");
     loading.className = "message ai";
@@ -73,28 +96,34 @@ function addLoading() {
 
     const content = document.createElement("div");
     content.className = "message-content";
-    content.innerHTML = 'Pensando<span class="loading-dots">...</span>';
+
+    content.innerHTML =
+        'Pensando<span class="loading-dots">...</span>';
 
     loading.appendChild(avatar);
     loading.appendChild(content);
 
     chat.appendChild(loading);
+
     chat.scrollTop = chat.scrollHeight;
 
     return loading;
 }
 
+// ================= ADICIONAR MENSAGEM =================
 
-// Adicionar mensagem
 function addMessage(type, text) {
     const message = document.createElement("div");
     message.className = "message " + type;
 
     const avatar = document.createElement("div");
-    avatar.className = "avatar " +
+
+    avatar.className =
+        "avatar " +
         (type === "ai" ? "ai-avatar" : "user-avatar");
 
-    avatar.textContent = type === "ai" ? "</>" : "VOCÊ";
+    avatar.textContent =
+        type === "ai" ? "</>" : "VOCÊ";
 
     const content = document.createElement("div");
     content.className = "message-content";
@@ -113,8 +142,8 @@ function addMessage(type, text) {
     chat.scrollTop = chat.scrollHeight;
 }
 
+// ================= FORMATAR RESPOSTA DA IA =================
 
-// Formatar resposta da IA
 function formatAIResponse(text) {
     const escaped = escapeHTML(text);
 
@@ -132,26 +161,31 @@ function formatAIResponse(text) {
         .replace(/\n/g, "<br>");
 }
 
+// ================= EVITAR HTML MALICIOSO =================
 
-// Evitar código HTML malicioso
 function escapeHTML(text) {
     const div = document.createElement("div");
+
     div.textContent = text;
+
     return div.innerHTML;
 }
 
+// ================= COPIAR CÓDIGO =================
 
-// Copiar código
 document.addEventListener("click", function(event) {
+
     if (!event.target.classList.contains("copy-code")) {
         return;
     }
 
-    const codeBlock = event.target.closest(".code-block");
+    const codeBlock =
+        event.target.closest(".code-block");
 
     if (!codeBlock) return;
 
-    const code = codeBlock.querySelector("pre").innerText;
+    const code =
+        codeBlock.querySelector("pre").innerText;
 
     navigator.clipboard.writeText(code);
 
@@ -162,41 +196,63 @@ document.addEventListener("click", function(event) {
     }, 1500);
 });
 
+// ================= BOTÃO ENVIAR =================
 
-// Botão enviar
 sendButton.addEventListener("click", function() {
     sendMessage();
 });
 
+// ================= ENTER ENVIA =================
 
-// Enter envia a mensagem
 input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter" && !event.shiftKey) {
+
+    if (
+        event.key === "Enter" &&
+        !event.shiftKey
+    ) {
         event.preventDefault();
+
         sendMessage();
     }
 });
 
+// ================= AJUSTAR ALTURA =================
 
-// Ajustar altura do campo
 input.addEventListener("input", function() {
+
     this.style.height = "auto";
+
     this.style.height =
         Math.min(this.scrollHeight, 150) + "px";
 });
 
+// ================= SUGESTÕES =================
 
-// Sugestões
-document.querySelectorAll(".suggestion").forEach(function(button) {
-    button.addEventListener("click", function() {
-        sendMessage(button.textContent.trim());
+document
+    .querySelectorAll(".suggestion")
+    .forEach(function(button) {
+
+        button.addEventListener("click", function() {
+
+            sendMessage(
+                button.textContent.trim()
+            );
+
+        });
+
     });
-});
 
+// ================= NOVA CONVERSA =================
 
-// Nova conversa
 newChat.addEventListener("click", function() {
+
+    // Limpa histórico
+    conversationHistory = [];
+
+    // Limpa mensagens
     chat.innerHTML = "";
+
+    // Coloca tela inicial novamente
     chat.appendChild(welcome);
 
     welcome.style.display = "block";
@@ -207,15 +263,18 @@ newChat.addEventListener("click", function() {
     input.focus();
 });
 
+// ================= MENU NO CELULAR =================
 
-// Menu no celular
 menuButton.addEventListener("click", function() {
+
     sidebar.classList.toggle("open");
+
 });
 
+// ================= FECHAR MENU =================
 
-// Fechar menu
 document.addEventListener("click", function(event) {
+
     if (
         sidebar.classList.contains("open") &&
         !sidebar.contains(event.target) &&
@@ -223,4 +282,5 @@ document.addEventListener("click", function(event) {
     ) {
         sidebar.classList.remove("open");
     }
+
 });
