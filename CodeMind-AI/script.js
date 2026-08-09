@@ -1,3 +1,23 @@
+/* =========================================================
+   CODEMIND AI
+   SupABASE + CHAT
+   ========================================================= */
+
+/* ================= SUPABASE ================= */
+
+const SUPABASE_URL = "https://rdmfqaxhmiujmxhhkqio.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_wuIZ16tYEiKAaX5mebmc6Q_KIXdzHiC";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* ================= ELEMENTOS ================= */
+
 const chat = document.getElementById("chat");
 const input = document.getElementById("messageInput");
 const sendButton = document.getElementById("sendButton");
@@ -6,25 +26,8 @@ const newChat = document.getElementById("newChat");
 const menuButton = document.getElementById("menuButton");
 const sidebar = document.querySelector(".sidebar");
 
-/* ================= SUPABASE ================= */
-
-const SUPABASE_URL = "https://rdmfqaxhmiujmxhhkqio.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_wuIZ16tYEiKAaX5mebmc6Q_KIXdzHiC";
-
-const supabaseClient =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-/* ================= LOGIN ================= */
-
 const loginButton = document.getElementById("loginButton");
-const loginModal = document.getElementById("loginModal");
 const closeLogin = document.getElementById("closeLogin");
-
 const googleLogin = document.getElementById("googleLogin");
 const emailLogin = document.getElementById("emailLogin");
 const createAccount = document.getElementById("createAccount");
@@ -33,720 +36,881 @@ const loginEmail = document.getElementById("loginEmail");
 const loginPassword = document.getElementById("loginPassword");
 const loginMessage = document.getElementById("loginMessage");
 
-/* Abrir login */
+const loginModal = document.querySelector(".login-modal");
 
-if (loginButton) {
 
-loginButton.addEventListener("click", function() {
+/* ================= ESTADO ================= */
 
-    loginModal.classList.add("open");
+let currentUser = null;
 
-});
 
+/* =========================================================
+   LOGIN MODAL
+   ========================================================= */
+
+function openLogin() {
+    if (!loginModal) return;
+
+    loginModal.classList.add("active");
+
+    if (loginEmail) {
+        loginEmail.focus();
+    }
 }
 
-/* Fechar login */
 
-if (closeLogin) {
+function closeLoginModal() {
+    if (!loginModal) return;
 
-closeLogin.addEventListener("click", function() {
+    loginModal.classList.remove("active");
 
-    loginModal.classList.remove("open");
-
-});
-
+    if (loginMessage) {
+        loginMessage.textContent = "";
+    }
 }
 
-/* Fechar clicando fora */
 
-if (loginModal) {
+/* ================= MENSAGEM DE LOGIN ================= */
 
-loginModal.addEventListener("click", function(event) {
+function showLoginMessage(message, error = false) {
+    if (!loginMessage) return;
 
-    if (event.target === loginModal) {
+    loginMessage.textContent = message;
 
-        loginModal.classList.remove("open");
+    loginMessage.style.color = error
+        ? "#ff6b6b"
+        : "#9b83ff";
+}
 
+
+/* =========================================================
+   VERIFICAR USUÁRIO
+   ========================================================= */
+
+async function checkAuth() {
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.getUser();
+
+    if (error || !data.user) {
+
+        currentUser = null;
+
+        showLoginRequired();
+
+        return;
     }
 
-});
+    currentUser = data.user;
 
+    hideLoginRequired();
+
+    console.log("Usuário conectado:", currentUser.email);
 }
 
-/* Login com Google */
 
-if (googleLogin) {
+/* ================= BLOQUEAR CHAT ================= */
 
-googleLogin.addEventListener("click", async function() {
+function showLoginRequired() {
 
-    loginMessage.textContent = "Conectando com Google...";
+    if (loginModal) {
+        loginModal.classList.add("active");
+    }
 
-    const { error } =
-        await supabaseClient.auth.signInWithOAuth({
+    if (input) {
+        input.disabled = true;
+    }
 
-            provider: "google",
+    if (sendButton) {
+        sendButton.disabled = true;
+        sendButton.style.opacity = "0.5";
+        sendButton.style.cursor = "not-allowed";
+    }
+}
 
-            options: {
 
-                redirectTo:
-                    window.location.origin
+/* ================= LIBERAR CHAT ================= */
 
-            }
+function hideLoginRequired() {
 
-        });
+    if (loginModal) {
+        loginModal.classList.remove("active");
+    }
+
+    if (input) {
+        input.disabled = false;
+    }
+
+    if (sendButton) {
+        sendButton.disabled = false;
+        sendButton.style.opacity = "1";
+        sendButton.style.cursor = "pointer";
+    }
+}
+
+
+/* =========================================================
+   LOGIN COM GOOGLE
+   ========================================================= */
+
+async function loginWithGoogle() {
+
+    showLoginMessage("Conectando com Google...");
+
+    const {
+        error
+    } = await supabaseClient.auth.signInWithOAuth({
+        provider: "google",
+
+        options: {
+            redirectTo: window.location.origin
+        }
+    });
 
     if (error) {
-
-        loginMessage.textContent =
-            "Erro ao entrar com Google: " +
-            error.message;
 
         console.error(error);
 
+        showLoginMessage(
+            "Erro ao entrar com Google: " + error.message,
+            true
+        );
     }
-
-});
-
 }
 
-/* Login com e-mail */
 
-if (emailLogin) {
+/* =========================================================
+   LOGIN COM E-MAIL
+   ========================================================= */
 
-emailLogin.addEventListener("click", async function() {
+async function loginWithEmail() {
 
-    const email =
-        loginEmail.value.trim();
-
-    const password =
-        loginPassword.value;
-
+    const email = loginEmail.value.trim();
+    const password = loginPassword.value;
 
     if (!email || !password) {
 
-        loginMessage.textContent =
-            "Digite seu e-mail e sua senha.";
+        showLoginMessage(
+            "Digite seu e-mail e sua senha.",
+            true
+        );
 
         return;
-
     }
 
+    showLoginMessage("Entrando...");
 
-    loginMessage.textContent =
-        "Entrando...";
-
-
-    const { error } =
-        await supabaseClient.auth.signInWithPassword({
-
-            email: email,
-
-            password: password
-
-        });
-
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
 
     if (error) {
 
-        loginMessage.textContent =
-            "Erro ao entrar: " +
-            error.message;
+        console.error(error);
+
+        showLoginMessage(
+            "Não foi possível entrar. Verifique e-mail e senha.",
+            true
+        );
 
         return;
-
     }
 
+    currentUser = data.user;
 
-    loginMessage.textContent =
-        "Login realizado!";
+    showLoginMessage("Login realizado!");
 
-    loginModal.classList.remove("open");
-
-    atualizarUsuario();
-
-});
-
+    setTimeout(() => {
+        hideLoginRequired();
+    }, 500);
 }
 
-/* Criar conta */
 
-if (createAccount) {
+/* =========================================================
+   CRIAR CONTA
+   ========================================================= */
 
-createAccount.addEventListener("click", async function() {
+async function createNewAccount() {
 
-    const email =
-        loginEmail.value.trim();
-
-    const password =
-        loginPassword.value;
-
+    const email = loginEmail.value.trim();
+    const password = loginPassword.value;
 
     if (!email || !password) {
 
-        loginMessage.textContent =
-            "Digite um e-mail e uma senha.";
+        showLoginMessage(
+            "Digite seu e-mail e crie uma senha.",
+            true
+        );
 
         return;
-
     }
-
 
     if (password.length < 6) {
 
-        loginMessage.textContent =
-            "A senha precisa ter pelo menos 6 caracteres.";
+        showLoginMessage(
+            "A senha precisa ter pelo menos 6 caracteres.",
+            true
+        );
 
         return;
-
     }
 
+    showLoginMessage("Criando sua conta...");
 
-    loginMessage.textContent =
-        "Criando sua conta...";
-
-
-    const { error } =
-        await supabaseClient.auth.signUp({
-
-            email: email,
-
-            password: password,
-
-            options: {
-
-                emailRedirectTo:
-                    window.location.origin
-
-            }
-
-        });
-
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+    });
 
     if (error) {
 
-        loginMessage.textContent =
-            "Erro ao criar conta: " +
-            error.message;
+        console.error(error);
+
+        showLoginMessage(
+            error.message,
+            true
+        );
 
         return;
-
     }
 
+    /*
+       Se a confirmação de e-mail estiver ativada
+       no Supabase, o usuário precisará confirmar
+       o e-mail antes de entrar.
+    */
 
-    loginMessage.textContent =
-        "Conta criada! Verifique seu e-mail para confirmar.";
+    if (!data.session) {
 
-});
+        showLoginMessage(
+            "Conta criada! Verifique seu e-mail para confirmar a conta."
+        );
 
-}
-
-/* ================= USUÁRIO ================= */
-
-async function atualizarUsuario() {
-
-const { data } =
-    await supabaseClient.auth.getUser();
-
-const user = data.user;
-
-
-if (!user) {
-
-    if (loginButton) {
-
-        loginButton.textContent =
-            "Entrar / Criar conta";
-
+        return;
     }
 
-    return;
+    currentUser = data.user;
 
+    showLoginMessage("Conta criada com sucesso!");
+
+    setTimeout(() => {
+        hideLoginRequired();
+    }, 500);
 }
 
 
-const nome =
-    user.user_metadata?.full_name ||
-    user.email?.split("@")[0] ||
-    "Usuário";
-
-
-if (loginButton) {
-
-    loginButton.textContent =
-        "👤 " + nome;
-
-}
-
-}
-
-/* Verificar login ao carregar */
-
-atualizarUsuario();
-
-/* Detectar login/logout */
+/* =========================================================
+   OBSERVAR LOGIN / LOGOUT
+   ========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
+    async (event, session) => {
 
-function(event, session) {
+        console.log("Auth:", event);
 
-    atualizarUsuario();
+        if (session && session.user) {
 
-}
+            currentUser = session.user;
 
+            hideLoginRequired();
+
+        } else {
+
+            currentUser = null;
+
+            showLoginRequired();
+        }
+    }
 );
 
-/* ================= ENVIAR MENSAGEM ================= */
+
+/* =========================================================
+   ENVIAR MENSAGEM
+   ========================================================= */
 
 async function sendMessage(text = null) {
 
-const message =
-    text || input.value.trim();
+    /* LOGIN OBRIGATÓRIO */
 
+    if (!currentUser) {
 
-if (!message) return;
+        openLogin();
 
+        return;
+    }
 
-welcome.style.display = "none";
+    const message = text || input.value.trim();
 
-input.value = "";
+    if (!message) return;
 
-input.style.height = "auto";
+    welcome.style.display = "none";
 
+    input.value = "";
+    input.style.height = "auto";
 
-addMessage("user", message);
+    addMessage("user", message);
 
+    const loading = addLoading();
 
-const loading =
-    addLoading();
+    try {
 
-
-try {
-
-    const response =
-        await fetch(
+        const response = await fetch(
             "/.netlify/functions/chat",
             {
-
                 method: "POST",
 
                 headers: {
-
-                    "Content-Type":
-                        "application/json"
-
+                    "Content-Type": "application/json"
                 },
 
                 body: JSON.stringify({
+                    message: message,
 
-                    message: message
+                    userId: currentUser.id,
 
+                    email: currentUser.email
                 })
-
             }
         );
 
+        const data = await response.json();
 
-    const data =
-        await response.json();
+        loading.remove();
 
+        if (!response.ok) {
 
-    loading.remove();
+            throw new Error(
+                data.error ||
+                `Erro ${response.status} ao conectar com a IA.`
+            );
+        }
 
-
-    if (!response.ok) {
-
-        throw new Error(
-
-            data.error ||
-            `Erro ${response.status} ao conectar com a IA.`
-
+        addMessage(
+            "ai",
+            data.reply
         );
 
+    } catch (error) {
+
+        loading.remove();
+
+        addMessage(
+            "ai",
+            "⚠️ Erro ao conectar com a IA:\n\n" +
+            error.message
+        );
+
+        console.error(
+            "Erro da CodeMind:",
+            error
+        );
     }
-
-
-    addMessage(
-        "ai",
-        data.reply
-    );
-
-
-} catch (error) {
-
-    loading.remove();
-
-
-    addMessage(
-
-        "ai",
-
-        "⚠️ Erro ao conectar com a IA:\n\n" +
-        error.message
-
-    );
-
-
-    console.error(
-        "Erro da CodeMind:",
-        error
-    );
-
 }
 
-}
 
-/* ================= CARREGAMENTO ================= */
+/* =========================================================
+   LOADING
+   ========================================================= */
 
 function addLoading() {
 
-const loading =
-    document.createElement("div");
+    const loading =
+        document.createElement("div");
 
-loading.className =
-    "message ai";
+    loading.className =
+        "message ai";
 
+    const avatar =
+        document.createElement("div");
 
-const avatar =
-    document.createElement("div");
+    avatar.className =
+        "avatar ai-avatar";
 
-avatar.className =
-    "avatar ai-avatar";
+    avatar.textContent =
+        "</>";
 
-avatar.textContent =
-    "</>";
+    const content =
+        document.createElement("div");
 
+    content.className =
+        "message-content";
 
-const content =
-    document.createElement("div");
+    content.innerHTML =
+        `
+        Pensando
+        <span class="loading-dots">...</span>
+        `;
 
-content.className =
-    "message-content";
+    loading.appendChild(avatar);
+    loading.appendChild(content);
 
-content.innerHTML =
-    'Pensando<span class="loading-dots">...</span>';
+    chat.appendChild(loading);
 
+    chat.scrollTop =
+        chat.scrollHeight;
 
-loading.appendChild(avatar);
-
-loading.appendChild(content);
-
-
-chat.appendChild(loading);
-
-chat.scrollTop =
-    chat.scrollHeight;
-
-
-return loading;
-
+    return loading;
 }
 
-/* ================= MENSAGEM ================= */
+
+/* =========================================================
+   ADICIONAR MENSAGEM
+   ========================================================= */
 
 function addMessage(type, text) {
 
-const message =
-    document.createElement("div");
+    const message =
+        document.createElement("div");
 
-message.className =
-    "message " + type;
+    message.className =
+        "message " + type;
 
+    const avatar =
+        document.createElement("div");
 
-const avatar =
-    document.createElement("div");
+    avatar.className =
+        "avatar " +
+        (type === "ai"
+            ? "ai-avatar"
+            : "user-avatar");
 
-avatar.className =
-    "avatar " +
-    (type === "ai"
-        ? "ai-avatar"
-        : "user-avatar");
+    avatar.textContent =
+        type === "ai"
+            ? "</>"
+            : "VOCÊ";
 
+    const content =
+        document.createElement("div");
 
-avatar.textContent =
-    type === "ai"
-        ? "</>"
-        : "VOCÊ";
+    content.className =
+        "message-content";
 
+    if (type === "ai") {
 
-const content =
-    document.createElement("div");
+        content.innerHTML =
+            formatAIResponse(text);
 
-content.className =
-    "message-content";
+    } else {
 
+        content.textContent =
+            text;
+    }
 
-if (type === "ai") {
+    message.appendChild(avatar);
+    message.appendChild(content);
 
-    content.innerHTML =
-        formatAIResponse(text);
+    chat.appendChild(message);
 
-} else {
-
-    content.textContent =
-        text;
-
+    chat.scrollTop =
+        chat.scrollHeight;
 }
 
 
-message.appendChild(avatar);
-
-message.appendChild(content);
-
-
-chat.appendChild(message);
-
-
-chat.scrollTop =
-    chat.scrollHeight;
-
-}
-
-/* ================= FORMATAR IA ================= */
+/* =========================================================
+   FORMATAR RESPOSTA DA IA
+   ========================================================= */
 
 function formatAIResponse(text) {
 
-const escaped =
-    escapeHTML(text);
+    const escaped =
+        escapeHTML(text);
 
+    return escaped
+        .replace(
+            /```(\w+)?\n?([\s\S]*?)```/g,
 
-return escaped
+            '<div class="code-block">' +
 
-    .replace(
+            '<div class="code-header">' +
 
-        /```(\w+)?\n?([\s\S]*?)```/g,
+            '<span>$1</span>' +
 
-        '<div class="code-block">' +
+            '<button class="copy-code">' +
+            'Copiar' +
+            '</button>' +
 
-        '<div class="code-header">' +
+            '</div>' +
 
-        '<span>$1</span>' +
+            '<pre>$2</pre>' +
 
-        '<button class="copy-code">Copiar</button>' +
+            '</div>'
+        )
 
-        '</div>' +
-
-        '<pre>$2</pre>' +
-
-        '</div>'
-
-    )
-
-    .replace(
-        /\n/g,
-        "<br>"
-    );
-
+        .replace(/\n/g, "<br>");
 }
 
-/* ================= SEGURANÇA ================= */
+
+/* =========================================================
+   SEGURANÇA
+   ========================================================= */
 
 function escapeHTML(text) {
 
-const div =
-    document.createElement("div");
+    const div =
+        document.createElement("div");
 
-div.textContent =
-    text;
+    div.textContent =
+        text;
 
-return div.innerHTML;
-
+    return div.innerHTML;
 }
 
-/* ================= COPIAR CÓDIGO ================= */
+
+/* =========================================================
+   COPIAR CÓDIGO
+   ========================================================= */
 
 document.addEventListener(
-"click",
-function(event) {
+    "click",
+    function (event) {
 
-    if (
-        !event.target.classList.contains(
-            "copy-code"
-        )
-    ) {
+        if (
+            !event.target.classList.contains(
+                "copy-code"
+            )
+        ) {
+            return;
+        }
 
-        return;
-
-    }
-
-
-    const codeBlock =
-        event.target.closest(
-            ".code-block"
-        );
-
-
-    if (!codeBlock) return;
-
-
-    const code =
-        codeBlock
-            .querySelector("pre")
-            .innerText;
-
-
-    navigator.clipboard.writeText(code);
-
-
-    event.target.textContent =
-        "Copiado!";
-
-
-    setTimeout(
-
-        function() {
-
-            event.target.textContent =
-                "Copiar";
-
-        },
-
-        1500
-
-    );
-
-}
-
-);
-
-/* ================= BOTÃO ENVIAR ================= */
-
-sendButton.addEventListener(
-"click",
-function() {
-
-    sendMessage();
-
-}
-
-);
-
-/* ================= ENTER ================= */
-
-input.addEventListener(
-"keydown",
-function(event) {
-
-    if (
-        event.key === "Enter" &&
-        !event.shiftKey
-    ) {
-
-        event.preventDefault();
-
-        sendMessage();
-
-    }
-
-}
-
-);
-
-/* ================= ALTURA INPUT ================= */
-
-input.addEventListener(
-"input",
-function() {
-
-    this.style.height =
-        "auto";
-
-
-    this.style.height =
-        Math.min(
-            this.scrollHeight,
-            150
-        ) + "px";
-
-}
-
-);
-
-/* ================= SUGESTÕES ================= */
-
-document
-.querySelectorAll(".suggestion")
-.forEach(function(button) {
-
-    button.addEventListener(
-        "click",
-        function() {
-
-            sendMessage(
-                button.textContent.trim()
+        const codeBlock =
+            event.target.closest(
+                ".code-block"
             );
+
+        if (!codeBlock) return;
+
+        const code =
+            codeBlock
+                .querySelector("pre")
+                .innerText;
+
+        navigator.clipboard
+            .writeText(code)
+            .then(() => {
+
+                event.target.textContent =
+                    "Copiado!";
+
+                setTimeout(() => {
+
+                    event.target.textContent =
+                        "Copiar";
+
+                }, 1500);
+
+            })
+            .catch(() => {
+
+                event.target.textContent =
+                    "Erro";
+
+                setTimeout(() => {
+
+                    event.target.textContent =
+                        "Copiar";
+
+                }, 1500);
+            });
+    }
+);
+
+
+/* =========================================================
+   BOTÃO ENVIAR
+   ========================================================= */
+
+if (sendButton) {
+
+    sendButton.addEventListener(
+        "click",
+        function () {
+
+            sendMessage();
 
         }
     );
-
-});
-
-/* ================= NOVA CONVERSA ================= */
-
-newChat.addEventListener(
-"click",
-function() {
-
-    chat.innerHTML = "";
-
-    chat.appendChild(welcome);
-
-
-    welcome.style.display =
-        "block";
-
-
-    input.value = "";
-
-    input.style.height =
-        "auto";
-
-
-    input.focus();
-
 }
 
-);
 
-/* ================= MENU MOBILE ================= */
+/* =========================================================
+   ENTER
+   ========================================================= */
 
-menuButton.addEventListener(
-"click",
-function() {
+if (input) {
 
-    sidebar.classList.toggle(
-        "open"
+    input.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Enter" &&
+                !event.shiftKey
+            ) {
+
+                event.preventDefault();
+
+                sendMessage();
+            }
+        }
     );
 
+
+    /* ================= ALTURA ================= */
+
+    input.addEventListener(
+        "input",
+        function () {
+
+            this.style.height =
+                "auto";
+
+            this.style.height =
+                Math.min(
+                    this.scrollHeight,
+                    150
+                ) + "px";
+        }
+    );
 }
 
-);
+
+/* =========================================================
+   SUGESTÕES
+   ========================================================= */
+
+document
+    .querySelectorAll(".suggestion")
+    .forEach(function (button) {
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                sendMessage(
+                    button.textContent.trim()
+                );
+
+            }
+        );
+    });
+
+
+/* =========================================================
+   NOVA CONVERSA
+   ========================================================= */
+
+if (newChat) {
+
+    newChat.addEventListener(
+        "click",
+        function () {
+
+            if (!currentUser) {
+
+                openLogin();
+
+                return;
+            }
+
+            chat.innerHTML = "";
+
+            chat.appendChild(welcome);
+
+            welcome.style.display =
+                "block";
+
+            input.value = "";
+
+            input.style.height =
+                "auto";
+
+            input.focus();
+        }
+    );
+}
+
+
+/* =========================================================
+   MENU MOBILE
+   ========================================================= */
+
+if (menuButton) {
+
+    menuButton.addEventListener(
+        "click",
+        function () {
+
+            sidebar.classList.toggle(
+                "open"
+            );
+        }
+    );
+}
+
 
 /* ================= FECHAR MENU ================= */
 
 document.addEventListener(
-"click",
-function(event) {
+    "click",
+    function (event) {
 
-    if (
+        if (
+            sidebar &&
+            sidebar.classList.contains("open") &&
+            !sidebar.contains(event.target) &&
+            event.target !== menuButton
+        ) {
 
-        sidebar.classList.contains(
-            "open"
-        ) &&
-
-        !sidebar.contains(
-            event.target
-        ) &&
-
-        event.target !== menuButton
-
-    ) {
-
-        sidebar.classList.remove(
-            "open"
-        );
-
+            sidebar.classList.remove(
+                "open"
+            );
+        }
     }
+);
 
+
+/* =========================================================
+   BOTÃO LOGIN
+   ========================================================= */
+
+if (loginButton) {
+
+    loginButton.addEventListener(
+        "click",
+        function () {
+
+            openLogin();
+
+        }
+    );
 }
 
+
+/* =========================================================
+   FECHAR LOGIN
+   ========================================================= */
+
+if (closeLogin) {
+
+    closeLogin.addEventListener(
+        "click",
+        function () {
+
+            /*
+               Não permite fechar o login
+               se o usuário ainda não estiver
+               autenticado.
+            */
+
+            if (!currentUser) {
+
+                showLoginMessage(
+                    "Você precisa entrar para usar a CodeMind."
+                );
+
+                return;
+            }
+
+            closeLoginModal();
+        }
+    );
+}
+
+
+/* =========================================================
+   GOOGLE
+   ========================================================= */
+
+if (googleLogin) {
+
+    googleLogin.addEventListener(
+        "click",
+        function () {
+
+            loginWithGoogle();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   E-MAIL
+   ========================================================= */
+
+if (emailLogin) {
+
+    emailLogin.addEventListener(
+        "click",
+        function () {
+
+            loginWithEmail();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   CRIAR CONTA
+   ========================================================= */
+
+if (createAccount) {
+
+    createAccount.addEventListener(
+        "click",
+        function () {
+
+            createNewAccount();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   ENTER NOS CAMPOS DE LOGIN
+   ========================================================= */
+
+if (loginPassword) {
+
+    loginPassword.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                loginWithEmail();
+            }
+        }
+    );
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        console.log(
+            "CodeMind AI iniciando..."
+        );
+
+        await checkAuth();
+
+    }
 );
