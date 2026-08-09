@@ -24,9 +24,11 @@ async function sendMessage(text = null) {
     try {
         const response = await fetch("/.netlify/functions/chat", {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
                 message: message
             })
@@ -37,7 +39,10 @@ async function sendMessage(text = null) {
         loading.remove();
 
         if (!response.ok) {
-            throw new Error(data.error || "Erro ao conectar com a IA.");
+            throw new Error(
+                data.error ||
+                `Erro ${response.status} ao conectar com a IA.`
+            );
         }
 
         addMessage("ai", data.reply);
@@ -47,12 +52,14 @@ async function sendMessage(text = null) {
 
         addMessage(
             "ai",
-            "⚠️ A IA ainda não está conectada. Vamos configurar essa parte agora."
+            "⚠️ Erro ao conectar com a IA:\n\n" +
+            error.message
         );
 
-        console.error(error);
+        console.error("Erro da CodeMind:", error);
     }
 }
+
 
 
 // Indicador de carregamento
