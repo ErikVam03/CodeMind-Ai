@@ -1,12 +1,8 @@
 ```javascript
 exports.handler = async function (event) {
-    // Só aceita requisições POST
     if (event.httpMethod !== "POST") {
         return {
             statusCode: 405,
-            headers: {
-                "Content-Type": "application/json"
-            },
             body: JSON.stringify({
                 error: "Método não permitido."
             })
@@ -20,31 +16,23 @@ exports.handler = async function (event) {
         if (!message || !message.trim()) {
             return {
                 statusCode: 400,
-                headers: {
-                    "Content-Type": "application/json"
-                },
                 body: JSON.stringify({
                     error: "Mensagem vazia."
                 })
             };
         }
 
-        // Chave da API do Groq
         const apiKey = process.env.GROQ_API_KEY;
 
         if (!apiKey) {
             return {
                 statusCode: 500,
-                headers: {
-                    "Content-Type": "application/json"
-                },
                 body: JSON.stringify({
-                    error: "Chave GROQ_API_KEY não configurada no Netlify."
+                    error: "GROQ_API_KEY não encontrada no Netlify."
                 })
             };
         }
 
-        // Envia a mensagem para o Groq
         const response = await fetch(
             "https://api.groq.com/openai/v1/chat/completions",
             {
@@ -61,103 +49,65 @@ exports.handler = async function (event) {
                     messages: [
                         {
                             role: "system",
-                            content: `
-Você é a CodeMind AI, uma inteligência artificial
-especializada exclusivamente em programação.
-
-Ajude o usuário com:
-
-- HTML
-- CSS
-- JavaScript
-- Python
-- Java
-- C e C++
-- PHP
-- SQL
-- React
-- Node.js
-- Git e GitHub
-- APIs
-- bancos de dados
-- correção de erros
-- criação e otimização de código.
-
-Explique de maneira clara e prática.
-
-Quando gerar código, use blocos de código Markdown.
-
-Se o usuário estiver começando, explique os conceitos
-de forma simples.
-
-Não invente informações técnicas.
-
-Quando houver mais de uma solução, explique qual é
-a mais recomendada e por quê.
-`
+                            content:
+                                "Você é a CodeMind AI, especializada em programação. " +
+                                "Ajude com HTML, CSS, JavaScript, Python, Java, C, C++, " +
+                                "PHP, SQL, React, Node.js, Git, GitHub, APIs e bancos de dados. " +
+                                "Explique de forma clara e prática."
                         },
                         {
                             role: "user",
                             content: message
                         }
-                    ],
-
-                    temperature: 0.7,
-                    max_tokens: 2048
+                    ]
                 })
             }
         );
 
         const data = await response.json();
 
-        // Verifica erro do Groq
         if (!response.ok) {
-            console.error("Erro Groq:", data);
+            console.error("ERRO DO GROQ:", data);
 
             return {
                 statusCode: response.status,
-                headers: {
-                    "Content-Type": "application/json"
-                },
                 body: JSON.stringify({
                     error:
-                        data.error?.message ||
-                        "Erro ao consultar a inteligência artificial."
+                        data?.error?.message ||
+                        JSON.stringify(data)
                 })
             };
         }
 
-        // Pega a resposta da IA
-        const reply =
-            data.choices?.[0]?.message?.content ||
-            "Não consegui gerar uma resposta.";
+        const reply = data?.choices?.[0]?.message?.content;
+
+        if (!reply) {
+            return {
+                statusCode: 500,
+                body: JSON.stringify({
+                    error: "O Groq não retornou uma resposta."
+                })
+            };
+        }
 
         return {
             statusCode: 200,
-
             headers: {
                 "Content-Type": "application/json"
             },
-
             body: JSON.stringify({
                 reply: reply
             })
         };
 
     } catch (error) {
-        console.error("Erro interno:", error);
+        console.error("ERRO NA FUNCTION:", error);
 
         return {
             statusCode: 500,
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
             body: JSON.stringify({
-                error: "Erro interno do servidor."
+                error: error.message || "Erro interno na Function."
             })
         };
     }
 };
-```
