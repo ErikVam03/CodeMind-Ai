@@ -54,6 +54,30 @@ async function sendMessage(text = null) {
     }
 }
 
+
+// Indicador de carregamento
+function addLoading() {
+    const loading = document.createElement("div");
+    loading.className = "message ai";
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar ai-avatar";
+    avatar.textContent = "</>";
+
+    const content = document.createElement("div");
+    content.className = "message-content";
+    content.innerHTML = 'Pensando<span class="loading-dots">...</span>';
+
+    loading.appendChild(avatar);
+    loading.appendChild(content);
+
+    chat.appendChild(loading);
+    chat.scrollTop = chat.scrollHeight;
+
+    return loading;
+}
+
+
 // Adicionar mensagem
 function addMessage(type, text) {
     const message = document.createElement("div");
@@ -82,6 +106,7 @@ function addMessage(type, text) {
     chat.scrollTop = chat.scrollHeight;
 }
 
+
 // Formatar resposta da IA
 function formatAIResponse(text) {
     const escaped = escapeHTML(text);
@@ -100,12 +125,14 @@ function formatAIResponse(text) {
         .replace(/\n/g, "<br>");
 }
 
+
 // Evitar código HTML malicioso
 function escapeHTML(text) {
     const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
 }
+
 
 // Copiar código
 document.addEventListener("click", function(event) {
@@ -128,10 +155,12 @@ document.addEventListener("click", function(event) {
     }, 1500);
 });
 
+
 // Botão enviar
 sendButton.addEventListener("click", function() {
     sendMessage();
 });
+
 
 // Enter envia a mensagem
 input.addEventListener("keydown", function(event) {
@@ -141,6 +170,7 @@ input.addEventListener("keydown", function(event) {
     }
 });
 
+
 // Ajustar altura do campo
 input.addEventListener("input", function() {
     this.style.height = "auto";
@@ -148,12 +178,14 @@ input.addEventListener("input", function() {
         Math.min(this.scrollHeight, 150) + "px";
 });
 
+
 // Sugestões
 document.querySelectorAll(".suggestion").forEach(function(button) {
     button.addEventListener("click", function() {
         sendMessage(button.textContent.trim());
     });
 });
+
 
 // Nova conversa
 newChat.addEventListener("click", function() {
@@ -168,10 +200,12 @@ newChat.addEventListener("click", function() {
     input.focus();
 });
 
+
 // Menu no celular
 menuButton.addEventListener("click", function() {
     sidebar.classList.toggle("open");
 });
+
 
 // Fechar menu
 document.addEventListener("click", function(event) {
