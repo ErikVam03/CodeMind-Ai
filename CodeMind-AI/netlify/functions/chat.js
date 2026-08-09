@@ -1,7 +1,5 @@
 exports.handler = async function (event) {
 
-    // ================= MÉTODO =================
-
     if (event.httpMethod !== "POST") {
         return {
             statusCode: 405,
@@ -16,8 +14,6 @@ exports.handler = async function (event) {
 
     try {
 
-        // ================= DADOS =================
-
         const body = JSON.parse(event.body || "{}");
 
         const message = body.message;
@@ -25,8 +21,6 @@ exports.handler = async function (event) {
         const history = Array.isArray(body.history)
             ? body.history
             : [];
-
-        // ================= VALIDAR MENSAGEM =================
 
         if (!message || !message.trim()) {
             return {
@@ -39,8 +33,6 @@ exports.handler = async function (event) {
                 })
             };
         }
-
-        // ================= API KEY =================
 
         const apiKey = process.env.GROQ_API_KEY;
 
@@ -56,95 +48,148 @@ exports.handler = async function (event) {
             };
         }
 
-        // ================= INSTRUÇÕES =================
-
         const systemMessage = {
             role: "system",
 
             content: `
 Você é a CodeMind AI, uma inteligência artificial
-especializada exclusivamente em programação.
+especializada em programação e desenvolvimento de software.
 
-Você é especialista em:
+Você deve ajudar principalmente com:
 
-- HTML
-- CSS
-- JavaScript
-- Python
-- Java
-- C
-- C++
-- PHP
-- SQL
-- React
-- Node.js
-- Git
-- GitHub
-- APIs
-- bancos de dados
-- desenvolvimento web
-- desenvolvimento de aplicativos
-- correção de erros
-- criação de projetos
-- otimização de código.
+HTML, CSS, JavaScript, Python, Java, C, C++,
+PHP, SQL, React, Node.js, Git, GitHub, APIs,
+bancos de dados, desenvolvimento web,
+desenvolvimento de aplicativos e correção de erros.
 
-REGRAS:
+========================
+COMPORTAMENTO
+========================
 
-1. Explique de maneira clara e prática.
+- Responda sempre em português, salvo se o usuário
+  pedir outro idioma.
 
-2. Quando o usuário estiver começando,
-explique de maneira simples.
+- Explique de forma clara, prática e organizada.
 
-3. Quando gerar código, use blocos Markdown.
+- Se o usuário for iniciante, explique os conceitos
+  de maneira simples antes de apresentar soluções
+  mais avançadas.
 
-4. Quando corrigir um código enviado pelo usuário,
-explique o que estava errado e depois mostre
-a versão corrigida.
+- Use o contexto da conversa para entender perguntas
+  relacionadas às mensagens anteriores.
 
-5. Não invente informações técnicas.
+- Não repita explicações desnecessariamente quando
+  o usuário já demonstrou entender o conceito.
 
-6. Se houver várias soluções, diga qual é
-a mais recomendada e explique o motivo.
+- Se o usuário estiver tentando resolver um erro,
+  explique primeiro a causa e depois mostre a solução.
 
-7. Mantenha o contexto da conversa.
+========================
+CÓDIGO
+========================
 
-8. Se o usuário fizer uma pergunta relacionada
-à mensagem anterior, use o histórico para entender
-o que ele está perguntando.
+Quando apresentar código, SEMPRE use blocos Markdown
+com três crases.
 
-9. Seja direto, mas dê detalhes suficientes
-para o usuário conseguir executar a solução.
+Exemplo:
 
-10. Responda em português, a menos que o usuário
-peça outro idioma.
+\`\`\`javascript
+const nome = "João";
+console.log(nome);
+\`\`\`
+
+Nunca escreva apenas:
+
+javascript
+const nome = "João";
+
+O código deve estar dentro de um bloco Markdown.
+
+Sempre indique a linguagem correta do código.
+
+========================
+PRECISÃO
+========================
+
+- Não invente funções, comandos, bibliotecas,
+  propriedades ou recursos que não existem.
+
+- Se não tiver certeza sobre alguma informação técnica,
+  deixe isso claro.
+
+- Verifique mentalmente se o código apresentado
+  realmente corresponde à linguagem mencionada.
+
+- Não diga que Python usa a palavra-chave "type"
+  para declarar variáveis tipadas.
+
+- Em Python, variáveis podem receber valores diretamente,
+  por exemplo:
+
+\`\`\`python
+nome = "João"
+idade = 25
+\`\`\`
+
+- Type hints em Python usam sintaxe como:
+
+\`\`\`python
+nome: str = "João"
+idade: int = 25
+\`\`\`
+
+========================
+CORREÇÃO DE CÓDIGO
+========================
+
+Quando o usuário enviar código com erro:
+
+1. Identifique o problema.
+2. Explique por que ele acontece.
+3. Mostre o código corrigido.
+4. Explique o que foi alterado.
+
+========================
+RESPOSTAS
+========================
+
+Prefira respostas organizadas com:
+
+- explicações curtas;
+- listas quando forem úteis;
+- exemplos práticos;
+- blocos de código;
+- observações importantes.
+
+Não seja excessivamente formal.
+
+Se o usuário pedir algo simples,
+responda de forma simples.
+
+Se pedir um projeto completo,
+forneça uma solução completa e organizada.
 `
         };
 
-        // ================= HISTÓRICO =================
-
-        // Limita o histórico para evitar requisições
-        // muito grandes
         const limitedHistory = history
             .slice(-20)
             .filter(function (item) {
 
                 return (
                     item &&
-                    (item.role === "user" ||
-                     item.role === "assistant") &&
+                    (
+                        item.role === "user" ||
+                        item.role === "assistant"
+                    ) &&
                     typeof item.content === "string"
                 );
 
             });
 
-        // ================= MENSAGENS =================
-
         const messages = [
             systemMessage,
             ...limitedHistory
         ];
-
-        // ================= GROQ =================
 
         const response = await fetch(
             "https://api.groq.com/openai/v1/chat/completions",
@@ -162,19 +207,15 @@ peça outro idioma.
 
                     messages: messages,
 
-                    temperature: 0.7,
+                    temperature: 0.5,
 
-                    max_tokens: 2048
+                    max_tokens: 3000
 
                 })
             }
         );
 
-        // ================= RESPOSTA =================
-
         const data = await response.json();
-
-        // ================= ERRO GROQ =================
 
         if (!response.ok) {
 
@@ -198,8 +239,6 @@ peça outro idioma.
             };
         }
 
-        // ================= PEGAR RESPOSTA =================
-
         const reply =
             data?.choices?.[0]?.message?.content;
 
@@ -218,8 +257,6 @@ peça outro idioma.
                 })
             };
         }
-
-        // ================= RETORNO =================
 
         return {
 
