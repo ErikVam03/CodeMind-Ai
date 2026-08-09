@@ -30,427 +30,427 @@
     rel="stylesheet"
 >
 
-<link rel="stylesheet" href="style.css">
+<link
+    rel="stylesheet"
+    href="style.css"
+>
 ```
 
 </head>
 
 <body>
 
+```
+<!-- ================= APP ================= -->
+
 <div class="app">
 
-```
-<!-- ================= SIDEBAR ================= -->
 
-<aside class="sidebar">
+    <!-- ================= SIDEBAR ================= -->
 
-    <div class="brand">
+    <aside class="sidebar">
 
-        <div class="brand-icon">
-            &lt;/&gt;
-        </div>
-
-        <div>
-            <strong>CodeMind</strong>
-            <span>AI</span>
-        </div>
-
-    </div>
-
-
-    <button class="new-chat" id="newChat">
-
-        <span>＋</span>
-
-        Nova conversa
-
-    </button>
-
-
-    <div class="sidebar-section">
-
-        <p>FERRAMENTAS</p>
-
-        <button
-            class="tool-button"
-            data-action="explain"
-        >
-            <span>◉</span>
-            Explicar código
-        </button>
-
-        <button
-            class="tool-button"
-            data-action="fix"
-        >
-            <span>⚡</span>
-            Corrigir código
-        </button>
-
-        <button
-            class="tool-button"
-            data-action="optimize"
-        >
-            <span>◆</span>
-            Otimizar código
-        </button>
-
-        <button
-            class="tool-button"
-            data-action="generate"
-        >
-            <span>✦</span>
-            Gerar código
-        </button>
-
-    </div>
-
-
-    <div class="sidebar-section">
-
-        <p>LINGUAGENS</p>
-
-        <div class="languages">
-
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>JavaScript</span>
-            <span>Python</span>
-            <span>Java</span>
-            <span>SQL</span>
-            <span>C++</span>
-            <span>PHP</span>
-
-        </div>
-
-    </div>
-
-
-    <div class="sidebar-bottom">
-
-        <div class="status">
-
-            <i></i>
-
-            Sistema online
-
-        </div>
-
-        <small>
-            CodeMind AI v1.0
-        </small>
-
-
-        <!-- BOTÃO LOGIN -->
-
-        <button
-            id="loginButton"
-            class="login-button"
-        >
-            Entrar / Criar conta
-        </button>
-
-    </div>
-
-</aside>
-
-
-<!-- ================= MAIN ================= -->
-
-<main class="main">
-
-
-    <!-- TOPBAR -->
-
-    <header class="topbar">
-
-        <div class="mobile-brand">
+        <div class="brand">
 
             <div class="brand-icon">
                 &lt;/&gt;
             </div>
 
-            <strong>
-                CodeMind AI
-            </strong>
-
-        </div>
-
-
-        <div class="model">
-
-            <span class="online-dot"></span>
-
-            Programador IA
+            <div>
+                <strong>CodeMind</strong>
+                <span>AI</span>
+            </div>
 
         </div>
 
 
         <button
-            class="menu-button"
-            id="menuButton"
+            class="new-chat"
+            id="newChat"
         >
-            ☰
+            <span>＋</span>
+            Nova conversa
         </button>
 
-    </header>
+
+        <div class="sidebar-section">
+
+            <p>FERRAMENTAS</p>
+
+            <button
+                class="tool-button"
+                data-action="explain"
+            >
+                <span>◉</span>
+                Explicar código
+            </button>
+
+            <button
+                class="tool-button"
+                data-action="fix"
+            >
+                <span>⚡</span>
+                Corrigir código
+            </button>
+
+            <button
+                class="tool-button"
+                data-action="optimize"
+            >
+                <span>◆</span>
+                Otimizar código
+            </button>
+
+            <button
+                class="tool-button"
+                data-action="generate"
+            >
+                <span>✦</span>
+                Gerar código
+            </button>
+
+        </div>
 
 
-    <!-- ================= CHAT ================= -->
+        <div class="sidebar-section">
 
-    <section
-        class="chat"
-        id="chat"
-    >
+            <p>LINGUAGENS</p>
 
-        <div
-            class="welcome"
-            id="welcome"
-        >
+            <div class="languages">
 
-            <div class="welcome-icon">
-
-                &lt;/&gt;
-
-            </div>
-
-
-            <h1>
-
-                Seu novo
-
-                <span>
-                    parceiro de código.
-                </span>
-
-            </h1>
-
-
-            <p>
-
-                Uma IA focada em programação
-                para criar, explicar, corrigir
-                e melhorar seus códigos.
-
-            </p>
-
-
-            <div class="suggestions">
-
-
-                <button class="suggestion">
-
-                    <span>⚡</span>
-
-                    Como criar uma API
-                    em JavaScript?
-
-                </button>
-
-
-                <button class="suggestion">
-
-                    <span>🐞</span>
-
-                    Encontre erros neste código
-
-                </button>
-
-
-                <button class="suggestion">
-
-                    <span>✦</span>
-
-                    Crie uma página moderna
-                    em HTML
-
-                </button>
-
-
-                <button class="suggestion">
-
-                    <span>◆</span>
-
-                    Explique programação
-                    para iniciantes
-
-                </button>
-
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+                <span>Python</span>
+                <span>Java</span>
+                <span>SQL</span>
+                <span>C++</span>
+                <span>PHP</span>
 
             </div>
 
         </div>
 
-    </section>
+
+        <div class="sidebar-bottom">
+
+            <div class="status">
+
+                <i></i>
+
+                Sistema online
+
+            </div>
+
+            <small>
+                CodeMind AI v1.0
+            </small>
 
 
-    <!-- ================= INPUT ================= -->
+            <button
+                id="loginButton"
+                class="login-button"
+            >
+                Entrar / Criar conta
+            </button>
 
-    <div class="input-area">
+            <button
+                id="logoutButton"
+                class="login-button"
+                style="display:none;"
+            >
+                Sair da conta
+            </button>
 
-        <div class="input-box">
+        </div>
 
-            <textarea
-                id="messageInput"
-                rows="1"
-                placeholder="Pergunte qualquer coisa sobre programação..."
-            ></textarea>
+    </aside>
 
 
-            <div class="input-bottom">
+    <!-- ================= MAIN ================= -->
 
-                <div class="input-info">
+    <main class="main">
 
-                    <span>⌘</span>
 
-                    CodeMind
+        <!-- ================= TOPBAR ================= -->
 
+        <header class="topbar">
+
+            <div class="mobile-brand">
+
+                <div class="brand-icon">
+                    &lt;/&gt;
+                </div>
+
+                <strong>
+                    CodeMind AI
+                </strong>
+
+            </div>
+
+
+            <div class="model">
+
+                <span class="online-dot"></span>
+
+                Programador IA
+
+            </div>
+
+
+            <button
+                class="menu-button"
+                id="menuButton"
+            >
+                ☰
+            </button>
+
+        </header>
+
+
+        <!-- ================= CHAT ================= -->
+
+        <section
+            class="chat"
+            id="chat"
+        >
+
+            <div
+                class="welcome"
+                id="welcome"
+            >
+
+                <div class="welcome-icon">
+                    &lt;/&gt;
                 </div>
 
 
-                <button
-                    id="sendButton"
-                    class="send-button"
-                >
+                <h1>
 
-                    <span>↑</span>
+                    Seu novo
 
-                </button>
+                    <span>
+                        parceiro de código.
+                    </span>
+
+                </h1>
+
+
+                <p>
+
+                    Uma IA focada em programação
+                    para criar, explicar, corrigir
+                    e melhorar seus códigos.
+
+                </p>
+
+
+                <div class="suggestions">
+
+
+                    <button class="suggestion">
+
+                        <span>⚡</span>
+
+                        Como criar uma API
+                        em JavaScript?
+
+                    </button>
+
+
+                    <button class="suggestion">
+
+                        <span>🐞</span>
+
+                        Encontre erros neste código
+
+                    </button>
+
+
+                    <button class="suggestion">
+
+                        <span>✦</span>
+
+                        Crie uma página moderna
+                        em HTML
+
+                    </button>
+
+
+                    <button class="suggestion">
+
+                        <span>◆</span>
+
+                        Explique programação
+                        para iniciantes
+
+                    </button>
+
+
+                </div>
 
             </div>
+
+        </section>
+
+
+        <!-- ================= INPUT ================= -->
+
+        <div class="input-area">
+
+            <div class="input-box">
+
+                <textarea
+                    id="messageInput"
+                    rows="1"
+                    placeholder="Pergunte qualquer coisa sobre programação..."
+                    disabled
+                ></textarea>
+
+
+                <div class="input-bottom">
+
+                    <div class="input-info">
+
+                        <span>⌘</span>
+
+                        CodeMind
+
+                    </div>
+
+
+                    <button
+                        id="sendButton"
+                        class="send-button"
+                        disabled
+                    >
+
+                        <span>↑</span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <p class="disclaimer">
+
+                A CodeMind pode cometer erros.
+                Sempre revise o código antes de usar.
+
+            </p>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- ================= LOGIN MODAL ================= -->
+
+<div
+    class="login-modal"
+    id="loginModal"
+>
+
+    <div class="login-box">
+
+
+        <button
+            id="closeLogin"
+            class="close-login"
+        >
+            ×
+        </button>
+
+
+        <div class="login-icon">
+            &lt;/&gt;
+        </div>
+
+
+        <h2>
+            Entrar na CodeMind
+        </h2>
+
+
+        <p>
+            Entre para continuar
+            usando a CodeMind AI.
+        </p>
+
+
+        <!-- GOOGLE -->
+
+        <button
+            id="googleLogin"
+            class="google-login"
+        >
+
+            <span>G</span>
+
+            Continuar com Google
+
+        </button>
+
+
+        <div class="login-divider">
+
+            <span>ou</span>
 
         </div>
 
 
-        <p class="disclaimer">
+        <!-- E-MAIL -->
 
-            A CodeMind pode cometer erros.
-            Sempre revise o código antes de usar.
-
-        </p>
-
-    </div>
-
-</main>
-```
-
-</div>
-
-<!-- ================= LOGIN ================= -->
-
-<div
-    id="loginModal"
-    class="login-modal"
->
-
-```
-<div class="login-box">
+        <input
+            type="email"
+            id="loginEmail"
+            placeholder="Seu e-mail"
+            autocomplete="email"
+        >
 
 
-    <button
-        id="closeLogin"
-        class="close-login"
-    >
-        ×
-    </button>
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Sua senha"
+            autocomplete="current-password"
+        >
 
 
-    <div class="login-icon">
-
-        &lt;/&gt;
-
-    </div>
-
-
-    <h2>
-        Entrar na CodeMind
-    </h2>
+        <button
+            id="emailLogin"
+            class="email-login"
+        >
+            Entrar
+        </button>
 
 
-    <p>
-
-        Entre para continuar
-        usando a CodeMind AI.
-
-    </p>
-
-
-    <!-- GOOGLE -->
-
-    <button
-        id="googleLogin"
-        class="google-login"
-    >
-
-        <span>G</span>
-
-        Continuar com Google
-
-    </button>
+        <button
+            id="createAccount"
+            class="create-account"
+        >
+            Criar uma conta
+        </button>
 
 
-    <div class="login-divider">
-
-        <span>ou</span>
+        <p
+            id="loginMessage"
+            class="login-message"
+        ></p>
 
     </div>
 
-
-    <!-- EMAIL -->
-
-    <input
-        type="email"
-        id="loginEmail"
-        placeholder="Seu e-mail"
-        autocomplete="email"
-    >
-
-
-    <input
-        type="password"
-        id="loginPassword"
-        placeholder="Sua senha"
-        autocomplete="current-password"
-    >
-
-
-    <button
-        id="emailLogin"
-        class="email-login"
-    >
-
-        Entrar
-
-    </button>
-
-
-    <button
-        id="createAccount"
-        class="create-account"
-    >
-
-        Criar uma conta
-
-    </button>
-
-
-    <p
-        id="loginMessage"
-        class="login-message"
-    ></p>
-
-</div>
-```
-
 </div>
 
-<!-- ================= SUPABASE ================= -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- ================= JAVASCRIPT ================= -->
+<!-- SCRIPT -->
 
 <script src="script.js"></script>
+```
 
 </body>
 
