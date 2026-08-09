@@ -597,12 +597,10 @@ opacity: .25;
 transform: translateY(0);
 }
 
-```
 30% {
     opacity: 1;
     transform: translateY(-4px);
 }
-```
 
 }
 
@@ -638,12 +636,10 @@ opacity: 0;
 transform: translateY(10px) scale(.98);
 }
 
-```
 to {
     opacity: 1;
     transform: translateY(0) scale(1);
 }
-```
 
 }
 
@@ -778,7 +774,6 @@ line-height: 1.4;
 
 @media (max-width: 750px) {
 
-```
 .sidebar {
     position: fixed;
     left: -280px;
