@@ -3,6 +3,7 @@
 <html lang="pt-BR">
 
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -11,6 +12,8 @@
 >
 
 <title>CodeMind AI</title>
+
+<!-- FONTES -->
 
 <link
     rel="preconnect"
@@ -27,6 +30,8 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
     rel="stylesheet"
 >
+
+<!-- CSS -->
 
 <link
     rel="stylesheet"
@@ -46,6 +51,7 @@
 
     <aside class="sidebar">
 
+
         <div class="brand">
 
             <div class="brand-icon">
@@ -53,74 +59,128 @@
             </div>
 
             <div>
-                <strong>CodeMind</strong>
-                <span>AI</span>
+
+                <strong>
+                    CodeMind
+                </strong>
+
+                <span>
+                    AI
+                </span>
+
             </div>
 
         </div>
 
 
+        <!-- NOVA CONVERSA -->
+
         <button
             class="new-chat"
             id="newChat"
         >
-            <span>＋</span>
+
+            <span>
+                ＋
+            </span>
+
             Nova conversa
+
         </button>
 
 
+        <!-- FERRAMENTAS -->
+
         <div class="sidebar-section">
 
-            <p>FERRAMENTAS</p>
+            <p>
+                FERRAMENTAS
+            </p>
+
 
             <button
                 class="tool-button"
                 data-action="explain"
             >
-                <span>◉</span>
+
+                <span>
+                    ◉
+                </span>
+
                 Explicar código
+
             </button>
+
 
             <button
                 class="tool-button"
                 data-action="fix"
             >
-                <span>⚡</span>
+
+                <span>
+                    ⚡
+                </span>
+
                 Corrigir código
+
             </button>
+
 
             <button
                 class="tool-button"
                 data-action="optimize"
             >
-                <span>◆</span>
+
+                <span>
+                    ◆
+                </span>
+
                 Otimizar código
+
             </button>
+
 
             <button
                 class="tool-button"
                 data-action="generate"
             >
-                <span>✦</span>
+
+                <span>
+                    ✦
+                </span>
+
                 Gerar código
+
             </button>
 
         </div>
 
 
+        <!-- LINGUAGENS -->
+
         <div class="sidebar-section">
 
-            <p>LINGUAGENS</p>
+            <p>
+                LINGUAGENS
+            </p>
+
 
             <div class="languages">
 
                 <span>HTML</span>
+
                 <span>CSS</span>
+
                 <span>JavaScript</span>
+
                 <span>Python</span>
+
                 <span>Java</span>
+
                 <span>SQL</span>
+
                 <span>C++</span>
+
                 <span>PHP</span>
 
             </div>
@@ -128,7 +188,10 @@
         </div>
 
 
+        <!-- PARTE INFERIOR -->
+
         <div class="sidebar-bottom">
+
 
             <div class="status">
 
@@ -138,25 +201,36 @@
 
             </div>
 
+
             <small>
                 CodeMind AI v1.0
             </small>
 
 
+            <!-- LOGIN -->
+
             <button
                 id="loginButton"
                 class="login-button"
             >
+
                 Entrar / Criar conta
+
             </button>
+
+
+            <!-- LOGOUT -->
 
             <button
                 id="logoutButton"
                 class="login-button"
-                style="display:none;"
+                style="display: none;"
             >
+
                 Sair da conta
+
             </button>
+
 
         </div>
 
@@ -168,18 +242,24 @@
     <main class="main">
 
 
-        <!-- ================= TOPBAR ================= -->
+        <!-- TOPBAR -->
 
         <header class="topbar">
+
 
             <div class="mobile-brand">
 
                 <div class="brand-icon">
+
                     &lt;/&gt;
+
                 </div>
 
+
                 <strong>
+
                     CodeMind AI
+
                 </strong>
 
             </div>
@@ -198,7 +278,9 @@
                 class="menu-button"
                 id="menuButton"
             >
+
                 ☰
+
             </button>
 
         </header>
@@ -211,13 +293,17 @@
             id="chat"
         >
 
+
             <div
                 class="welcome"
                 id="welcome"
             >
 
+
                 <div class="welcome-icon">
+
                     &lt;/&gt;
+
                 </div>
 
 
@@ -226,7 +312,9 @@
                     Seu novo
 
                     <span>
+
                         parceiro de código.
+
                     </span>
 
                 </h1>
@@ -241,12 +329,16 @@
                 </p>
 
 
+                <!-- SUGESTÕES -->
+
                 <div class="suggestions">
 
 
                     <button class="suggestion">
 
-                        <span>⚡</span>
+                        <span>
+                            ⚡
+                        </span>
 
                         Como criar uma API
                         em JavaScript?
@@ -256,7 +348,9 @@
 
                     <button class="suggestion">
 
-                        <span>🐞</span>
+                        <span>
+                            🐞
+                        </span>
 
                         Encontre erros neste código
 
@@ -265,7 +359,9 @@
 
                     <button class="suggestion">
 
-                        <span>✦</span>
+                        <span>
+                            ✦
+                        </span>
 
                         Crie uma página moderna
                         em HTML
@@ -275,7 +371,9 @@
 
                     <button class="suggestion">
 
-                        <span>◆</span>
+                        <span>
+                            ◆
+                        </span>
 
                         Explique programação
                         para iniciantes
@@ -294,7 +392,9 @@
 
         <div class="input-area">
 
+
             <div class="input-box">
+
 
                 <textarea
                     id="messageInput"
@@ -306,9 +406,12 @@
 
                 <div class="input-bottom">
 
+
                     <div class="input-info">
 
-                        <span>⌘</span>
+                        <span>
+                            ⌘
+                        </span>
 
                         CodeMind
 
@@ -321,9 +424,12 @@
                         disabled
                     >
 
-                        <span>↑</span>
+                        <span>
+                            ↑
+                        </span>
 
                     </button>
+
 
                 </div>
 
@@ -344,37 +450,50 @@
 </div>
 
 
-<!-- ================= LOGIN MODAL ================= -->
+<!-- ================= LOGIN ================= -->
 
 <div
     class="login-modal"
     id="loginModal"
 >
 
+
     <div class="login-box">
 
+
+        <!-- FECHAR -->
 
         <button
             id="closeLogin"
             class="close-login"
         >
+
             ×
+
         </button>
 
 
+        <!-- ÍCONE -->
+
         <div class="login-icon">
+
             &lt;/&gt;
+
         </div>
 
 
         <h2>
+
             Entrar na CodeMind
+
         </h2>
 
 
         <p>
+
             Entre para continuar
             usando a CodeMind AI.
+
         </p>
 
 
@@ -385,16 +504,22 @@
             class="google-login"
         >
 
-            <span>G</span>
+            <span>
+                G
+            </span>
 
             Continuar com Google
 
         </button>
 
 
+        <!-- DIVISOR -->
+
         <div class="login-divider">
 
-            <span>ou</span>
+            <span>
+                ou
+            </span>
 
         </div>
 
@@ -409,6 +534,8 @@
         >
 
 
+        <!-- SENHA -->
+
         <input
             type="password"
             id="loginPassword"
@@ -417,33 +544,51 @@
         >
 
 
+        <!-- ENTRAR -->
+
         <button
             id="emailLogin"
             class="email-login"
         >
+
             Entrar
+
         </button>
 
+
+        <!-- CRIAR CONTA -->
 
         <button
             id="createAccount"
             class="create-account"
         >
+
             Criar uma conta
+
         </button>
 
+
+        <!-- MENSAGEM -->
 
         <p
             id="loginMessage"
             class="login-message"
         ></p>
 
+
     </div>
 
 </div>
 
 
-<!-- SCRIPT -->
+<!-- ================= SUPABASE ================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+<!-- ================= SEU SCRIPT ================= -->
 
 <script src="script.js"></script>
 
