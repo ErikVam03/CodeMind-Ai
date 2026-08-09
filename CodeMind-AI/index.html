@@ -1,56 +1,61 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>CodeMind AI</title>
+    <title>CodeMind AI</title>
 
-<!-- FONTES -->
+    <!-- FONTES -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
-<link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
->
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
-<link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
 
-<link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-    rel="stylesheet"
->
-
-<!-- CSS -->
-
-<link
-    rel="stylesheet"
-    href="style.css"
->
+    <!-- CSS -->
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
+
 <body>
 
-<!-- ================= APP ================= -->
+
+<!-- =====================================================
+     APP
+===================================================== -->
 
 <div class="app">
 
 
-    <!-- ================= SIDEBAR ================= -->
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
 
     <aside class="sidebar">
 
+
+        <!-- LOGO -->
 
         <div class="brand">
 
@@ -60,13 +65,9 @@
 
             <div>
 
-                <strong>
-                    CodeMind
-                </strong>
+                <strong>CodeMind</strong>
 
-                <span>
-                    AI
-                </span>
+                <span>AI</span>
 
             </div>
 
@@ -78,11 +79,10 @@
         <button
             class="new-chat"
             id="newChat"
+            type="button"
         >
 
-            <span>
-                ＋
-            </span>
+            <span>＋</span>
 
             Nova conversa
 
@@ -93,19 +93,16 @@
 
         <div class="sidebar-section">
 
-            <p>
-                FERRAMENTAS
-            </p>
+            <p>FERRAMENTAS</p>
 
 
             <button
                 class="tool-button"
                 data-action="explain"
+                type="button"
             >
 
-                <span>
-                    ◉
-                </span>
+                <span>◉</span>
 
                 Explicar código
 
@@ -115,11 +112,10 @@
             <button
                 class="tool-button"
                 data-action="fix"
+                type="button"
             >
 
-                <span>
-                    ⚡
-                </span>
+                <span>⚡</span>
 
                 Corrigir código
 
@@ -129,11 +125,10 @@
             <button
                 class="tool-button"
                 data-action="optimize"
+                type="button"
             >
 
-                <span>
-                    ◆
-                </span>
+                <span>◆</span>
 
                 Otimizar código
 
@@ -143,11 +138,10 @@
             <button
                 class="tool-button"
                 data-action="generate"
+                type="button"
             >
 
-                <span>
-                    ✦
-                </span>
+                <span>✦</span>
 
                 Gerar código
 
@@ -160,27 +154,17 @@
 
         <div class="sidebar-section">
 
-            <p>
-                LINGUAGENS
-            </p>
-
+            <p>LINGUAGENS</p>
 
             <div class="languages">
 
                 <span>HTML</span>
-
                 <span>CSS</span>
-
                 <span>JavaScript</span>
-
                 <span>Python</span>
-
                 <span>Java</span>
-
                 <span>SQL</span>
-
                 <span>C++</span>
-
                 <span>PHP</span>
 
             </div>
@@ -212,22 +196,10 @@
             <button
                 id="loginButton"
                 class="login-button"
+                type="button"
             >
 
                 Entrar / Criar conta
-
-            </button>
-
-
-            <!-- LOGOUT -->
-
-            <button
-                id="logoutButton"
-                class="login-button"
-                style="display: none;"
-            >
-
-                Sair da conta
 
             </button>
 
@@ -237,7 +209,10 @@
     </aside>
 
 
-    <!-- ================= MAIN ================= -->
+
+    <!-- =================================================
+         MAIN
+    ================================================== -->
 
     <main class="main">
 
@@ -250,16 +225,11 @@
             <div class="mobile-brand">
 
                 <div class="brand-icon">
-
                     &lt;/&gt;
-
                 </div>
 
-
                 <strong>
-
                     CodeMind AI
-
                 </strong>
 
             </div>
@@ -277,22 +247,29 @@
             <button
                 class="menu-button"
                 id="menuButton"
+                type="button"
             >
 
                 ☰
 
             </button>
 
+
         </header>
 
 
-        <!-- ================= CHAT ================= -->
+
+        <!-- =================================================
+             CHAT
+        ================================================== -->
 
         <section
             class="chat"
             id="chat"
         >
 
+
+            <!-- TELA INICIAL -->
 
             <div
                 class="welcome"
@@ -312,9 +289,7 @@
                     Seu novo
 
                     <span>
-
                         parceiro de código.
-
                     </span>
 
                 </h1>
@@ -334,11 +309,12 @@
                 <div class="suggestions">
 
 
-                    <button class="suggestion">
+                    <button
+                        class="suggestion"
+                        type="button"
+                    >
 
-                        <span>
-                            ⚡
-                        </span>
+                        <span>⚡</span>
 
                         Como criar uma API
                         em JavaScript?
@@ -346,22 +322,24 @@
                     </button>
 
 
-                    <button class="suggestion">
+                    <button
+                        class="suggestion"
+                        type="button"
+                    >
 
-                        <span>
-                            🐞
-                        </span>
+                        <span>🐞</span>
 
                         Encontre erros neste código
 
                     </button>
 
 
-                    <button class="suggestion">
+                    <button
+                        class="suggestion"
+                        type="button"
+                    >
 
-                        <span>
-                            ✦
-                        </span>
+                        <span>✦</span>
 
                         Crie uma página moderna
                         em HTML
@@ -369,11 +347,12 @@
                     </button>
 
 
-                    <button class="suggestion">
+                    <button
+                        class="suggestion"
+                        type="button"
+                    >
 
-                        <span>
-                            ◆
-                        </span>
+                        <span>◆</span>
 
                         Explique programação
                         para iniciantes
@@ -388,7 +367,10 @@
         </section>
 
 
-        <!-- ================= INPUT ================= -->
+
+        <!-- =================================================
+             INPUT
+        ================================================== -->
 
         <div class="input-area">
 
@@ -400,7 +382,7 @@
                     id="messageInput"
                     rows="1"
                     placeholder="Pergunte qualquer coisa sobre programação..."
-                    disabled
+                    autocomplete="off"
                 ></textarea>
 
 
@@ -409,9 +391,7 @@
 
                     <div class="input-info">
 
-                        <span>
-                            ⌘
-                        </span>
+                        <span>⌘</span>
 
                         CodeMind
 
@@ -421,17 +401,16 @@
                     <button
                         id="sendButton"
                         class="send-button"
-                        disabled
+                        type="button"
                     >
 
-                        <span>
-                            ↑
-                        </span>
+                        <span>↑</span>
 
                     </button>
 
 
                 </div>
+
 
             </div>
 
@@ -443,14 +422,19 @@
 
             </p>
 
+
         </div>
+
 
     </main>
 
 </div>
 
 
-<!-- ================= LOGIN ================= -->
+
+<!-- =====================================================
+     LOGIN MODAL
+===================================================== -->
 
 <div
     class="login-modal"
@@ -466,6 +450,8 @@
         <button
             id="closeLogin"
             class="close-login"
+            type="button"
+            aria-label="Fechar"
         >
 
             ×
@@ -483,9 +469,7 @@
 
 
         <h2>
-
             Entrar na CodeMind
-
         </h2>
 
 
@@ -497,31 +481,31 @@
         </p>
 
 
+
         <!-- GOOGLE -->
 
         <button
             id="googleLogin"
             class="google-login"
+            type="button"
         >
 
-            <span>
-                G
-            </span>
+            <span>G</span>
 
             Continuar com Google
 
         </button>
 
 
+
         <!-- DIVISOR -->
 
         <div class="login-divider">
 
-            <span>
-                ou
-            </span>
+            <span>ou</span>
 
         </div>
+
 
 
         <!-- E-MAIL -->
@@ -549,6 +533,7 @@
         <button
             id="emailLogin"
             class="email-login"
+            type="button"
         >
 
             Entrar
@@ -561,6 +546,7 @@
         <button
             id="createAccount"
             class="create-account"
+            type="button"
         >
 
             Criar uma conta
@@ -581,16 +567,20 @@
 </div>
 
 
-<!-- ================= SUPABASE ================= -->
 
-<script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-<!-- ================= SEU SCRIPT ================= -->
+<!-- =====================================================
+     CODEMIND SCRIPT
+===================================================== -->
 
 <script src="script.js"></script>
+
 
 </body>
 
